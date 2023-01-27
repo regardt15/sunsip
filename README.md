@@ -9,8 +9,13 @@
 
       ansible-playbook -i inventory.yaml home.yaml
 
+# Onboarding
 - Homeassistant is now available at: http://your_host_ip:8123/  where your_host_ip is the one in inventory.yaml
-
+- Once logged in and done with basic onboarding add an integration for mosquitto:
+  - Go to Settings, Integrations
+  - Click Add Integration button
+  - Search for MQTT, and inside there MQTT (without anything after it)
+  - In config options, type mosquitto for the broker name, leave all other options defaulted
 
 # Docker cheat-sheet
 - sudo docker container ls                           # List running containers
@@ -23,6 +28,7 @@
 
 
 # References
+Voltronic-mqtt: https://github.com/ned-kelly/docker-voltronic-homeassistant
 Version of compose file used: https://github.com/docker/compose/issues/8251
 Giving Voltronic-mqtt access to USB inside docker: https://stackoverflow.com/questions/24225647/docker-a-way-to-give-access-to-a-host-usb-or-serial-device#answer-66427245
 
