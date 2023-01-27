@@ -1,0 +1,57 @@
+version: '2.4'   # So that device_cgroup_rules will work using docker-compose version 1.25.0
+                 # See https://github.com/docker/compose/issues/8251
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "homeassistant/home-assistant:stable"
+    restart: unless-stopped
+    volumes:
+      - /opt/home/hass/config:/config
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "8123:8123"
+#    network_mode: host
+
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:2.0
+    restart: unless-stopped
+    volumes:
+      - ./mos/config:/mosquitto/config
+      - ./mos/data:/mosquitto/data
+      - ./mos/logs:/mosquitto/logs
+    ports:
+      - "1883:1883"
+#      - "9001:9001"
+    
+  voltronic-mqtt:
+    container_name: voltronic-mqtt
+    build:
+      context: .
+      dockerfile: Dockerfile.voltronic
+    restart: unless-stopped
+# Only supported from 3.9
+#    profiles:
+#      - dontstart
+
+    device_cgroup_rules:
+      - 'c 188:* rmw'  # For USB serial
+
+    volumes:
+        # - /run/udev:/run/udev:ro
+        # - /dev:/dev:ro
+        - /opt/home/voltronic/config:/etc/inverter/
+
+    # devices:
+    # #  - "/dev/mem:/dev/mem"
+
+    # # USB Port Mapping
+    #   - /dev/bus/usb:/dev/bus/usb:rwm
+    #   - /dev/ttyUSB0:/dev/ttyUSB0:rwm
+    #   - /dev/ttyUSB1:/dev/ttyUSB1:rwm
+
+    # # Serial Port Mapping...
+    #   - /dev/ttyS0:/dev/ttyS0
+    #   - /dev/ttyS1:/dev/ttyS1
+    #   - /dev/ttyS2:/dev/ttyS2
+

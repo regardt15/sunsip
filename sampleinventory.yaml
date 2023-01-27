@@ -1,0 +1,7 @@
+all:
+  children:
+    homeassistant:
+      hosts:
+          [YOUR HOST NAME]:
+            ansible_host: [YOUR HOST IP]
+            ansible_user: [YOUR USER NAME ON HOST]

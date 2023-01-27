@@ -1,0 +1,96 @@
+---
+- name: Install home assistant server
+  hosts: homeassistant
+
+  tasks:
+  - name: Install docker
+    become: true
+    apt:
+      pkg:
+        - docker.io
+        - containerd
+        - runc
+        - docker-compose
+      purge: true
+      state: present
+      
+  # For newer docker - but seems not to work on rasbian currently
+  # - name: Add docker repo key
+  #   apt_key:
+  #     url: https://download.docker.com/linux/raspbian/gpg
+  #     state: present
+  #   become: true
+  # - name: Add docker repo
+  #   apt_repository:
+  #     repo: deb https://download.docker.com/linux/raspbian bullseye stable
+  #     state: present
+  #   become: true
+  # - name: Install docker
+  #   apt:
+  #     update_cache: true
+  #     pkg:
+  #       - docker-ce
+  #       - docker-ce-cli
+  #       - containerd.io
+  #       - docker-compose-plugin
+  #     state: present
+  #   become: true
+
+  - name: Create homeassistant directories
+    become: true
+    file:
+      path: /opt/home/hass/config
+      state: directory
+
+  - name: Create mosquitto directories
+    become: true
+    file:
+      path: "/opt/home/mos/{{ item }}"
+      state: directory
+    loop:
+      - data
+      - config
+      - logs
+        
+  - name: Configure mosquitto
+    become: true
+    copy:
+      src: ./mosquitto/mosquitto.conf
+      dest: /opt/home/mos/config/mosquitto.conf
+
+  - name: Create voltronic directory
+    become: true
+    file:
+      path: /opt/home/voltronic/config
+      state: directory
+
+  - name: Configure voltronic
+    become: true
+    copy:
+      src: "./voltronic/{{ item }}"
+      dest: /opt/home/voltronic/config/
+    loop:
+      - inverter.conf
+      - mqtt.json
+        
+  - name: Create Dockerfile and related for voltronic
+    become: true
+    copy:
+      src: "./voltronic/{{ item }}"
+      dest: /opt/home/
+    loop:
+      - Dockerfile.voltronic
+      - docker-tty.rules
+      - docker_tty.sh
+
+  - name: Create docker-compose.yaml
+    become: true
+    copy:
+      src: ./docker-compose.yaml
+      dest: /opt/home/docker-compose.yaml
+
+  - name: Start homeassistant and friends
+    become: true
+    command: /usr/bin/docker-compose -f /opt/home/docker-compose.yaml up --remove-orphans --force-recreate --detach 
+    args:
+      chdir: /opt/home
