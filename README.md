@@ -5,7 +5,12 @@
 - Install your server and ensure you can ssh to it and that the ssh user can sudo.
 - Copy sampleinventory.yaml to inventory.yaml and edit with your hosts info.
 - Install ansible on the workstation where this project is checked out.
-- Run: ansible-playbook -i inventory.yaml home.yaml
+- Run: 
+
+      ansible-playbook -i inventory.yaml home.yaml
+
+- Homeassistant is now available at: http://your_host_ip:8123/  where your_host_ip is the one in inventory.yaml
+
 
 # Docker cheat-sheet
 - sudo docker container ls                           # List running containers
