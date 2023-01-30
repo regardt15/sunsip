@@ -3,6 +3,18 @@
   hosts: homeassistant
 
   tasks:
+  - name: Install basic stuff
+    become: true
+    apt:
+      pkg:
+        - avahi-daemon
+        - git
+        - gnupg2
+        - ca-certificates
+      purge: true
+      state: present
+        
+  tasks:
   - name: Install docker
     become: true
     apt:
@@ -72,14 +84,13 @@
     loop:
       - inverter.conf
       - mqtt.json
-        
-  - name: Create Dockerfile and related for voltronic
+
+  - name: Install device rules and script        
     become: true
     copy:
-      src: "./voltronic/{{ item }}"
+      src: "./devices/{{ item }}"
       dest: /opt/home/
     loop:
-      - Dockerfile.voltronic
       - docker-tty.rules
       - docker_tty.sh
 

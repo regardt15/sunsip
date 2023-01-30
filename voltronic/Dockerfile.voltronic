@@ -1,4 +1,0 @@
-FROM bushrangers/ha-voltronic-mqtt
-
-COPY ./docker_tty.sh /usr/local/bin/docker_tty.sh
-COPY ./docker-tty.rules /etc/udev/rules.d/99-docker-tty.rules
