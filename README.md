@@ -41,5 +41,4 @@
 - Investigate logging config of homeassistant (perhaps to stdout not a file?)
 - Investigate file ownerships and owner of running processes.
 - Investigate security considerations.
-- Naming the USB device: https://community.openhab.org/t/raspberry-pi-make-serial-usb-ports-persistent-via-symlinks/35847
 - Rotating logfiles (including /var/log/docker_tty.log).

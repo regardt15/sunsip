@@ -84,14 +84,23 @@
       - inverter.conf
       - mqtt.json
 
-  - name: Install device rules and script        
+  - name: Install device script
     become: true
     copy:
-      src: "./devices/{{ item }}"
-      dest: /opt/home/
-    loop:
-      - docker-tty.rules
-      - docker_tty.sh
+      src:  ./devices/docker_tty.sh
+      dest: /usr/local/bin/docker_tty.sh
+      mode: preserve
+
+  - name: Install device rules 
+    become: true
+    copy:
+      src:  ./devices/docker-tty.rules
+      dest: /etc/udev/rules.d/99-docker-tty.rules
+      mode: preserve
+
+  - name: Reload rules
+    become: true
+    command: /usr/bin/udevadm control --reload
 
   - name: Create docker-compose.yaml
     become: true

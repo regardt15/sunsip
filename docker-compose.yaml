@@ -39,8 +39,6 @@ services:
         # - /run/udev:/run/udev:ro
         # - /dev:/dev:ro
         - /opt/home/voltronic/config:/etc/inverter/
-        - /opt/home/docker_tty.sh:/usr/local/bin/docker_tty.sh
-        - /opt/home/docker-tty.rules:/etc/udev/rules.d/99-docker-tty.rules
 
     # devices:
     # #  - "/dev/mem:/dev/mem"
