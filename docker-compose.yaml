@@ -11,6 +11,8 @@ services:
     ports:
       - "8123:8123"
 #    network_mode: host
+    device_cgroup_rules:
+      - 'c 188:* rmw'  # For USB serial
 
   mosquitto:
     container_name: mosquitto
@@ -24,32 +26,32 @@ services:
       - "1883:1883"
 #      - "9001:9001"
     
-  voltronic-mqtt:
-    container_name: voltronic-mqtt
-    image: bushrangers/ha-voltronic-mqtt
-    restart: unless-stopped
-# Only supported from 3.9
-#    profiles:
-#      - dontstart
+#   voltronic-mqtt:
+#     container_name: voltronic-mqtt
+#     image: bushrangers/ha-voltronic-mqtt
+#     restart: unless-stopped
+# # Only supported from 3.9
+# #    profiles:
+# #      - dontstart
 
-    device_cgroup_rules:
-      - 'c 188:* rmw'  # For USB serial
+#     device_cgroup_rules:
+#       - 'c 188:* rmw'  # For USB serial
 
-    volumes:
-        # - /run/udev:/run/udev:ro
-        # - /dev:/dev:ro
-        - /opt/home/voltronic/config:/etc/inverter/
+#     volumes:
+#         # - /run/udev:/run/udev:ro
+#         # - /dev:/dev:ro
+#         - /opt/home/voltronic/config:/etc/inverter/
 
-    # devices:
-    # #  - "/dev/mem:/dev/mem"
+#     # devices:
+#     # #  - "/dev/mem:/dev/mem"
 
-    # # USB Port Mapping
-    #   - /dev/bus/usb:/dev/bus/usb:rwm
-    #   - /dev/ttyUSB0:/dev/ttyUSB0:rwm
-    #   - /dev/ttyUSB1:/dev/ttyUSB1:rwm
+#     # # USB Port Mapping
+#     #   - /dev/bus/usb:/dev/bus/usb:rwm
+#     #   - /dev/ttyUSB0:/dev/ttyUSB0:rwm
+#     #   - /dev/ttyUSB1:/dev/ttyUSB1:rwm
 
-    # # Serial Port Mapping...
-    #   - /dev/ttyS0:/dev/ttyS0
-    #   - /dev/ttyS1:/dev/ttyS1
-    #   - /dev/ttyS2:/dev/ttyS2
+#     # # Serial Port Mapping...
+#     #   - /dev/ttyS0:/dev/ttyS0
+#     #   - /dev/ttyS1:/dev/ttyS1
+#     #   - /dev/ttyS2:/dev/ttyS2
 

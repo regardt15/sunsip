@@ -11,6 +11,7 @@
         - git
         - gnupg2
         - ca-certificates
+        - wget
       purge: true
       state: present
         
@@ -52,6 +53,19 @@
     file:
       path: /opt/home/hass/config
       state: directory
+        
+  - name: Fetch HACS install script
+    become: true
+    get_url:
+      url: https://get.hacs.xyz
+      dest: /opt/home/hass/gethacs
+      mode: 755
+
+  - name: Install HACS
+    become: true
+    command: bash /opt/home/hass/gethacs
+    args:
+      chdir: /opt/home/hass/config
 
   - name: Create mosquitto directories
     become: true

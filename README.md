@@ -34,6 +34,7 @@
 - Voltronic-mqtt: https://github.com/ned-kelly/docker-voltronic-homeassistant
 - Version of compose file used: https://github.com/docker/compose/issues/8251
 - Giving Voltronic-mqtt access to USB inside docker: https://stackoverflow.com/questions/24225647/docker-a-way-to-give-access-to-a-host-usb-or-serial-device#answer-66427245
+- Growatt doc (possibly outdated) https://www.photovoltaicsolar.in/Growatt_Manual/MAX%20Series%20Modbus%20RTU%20Protocol.pdf
 
 # TODO
 
