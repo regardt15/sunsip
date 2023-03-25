@@ -30,7 +30,7 @@ modbus:
     stopbits: 1
 
     sensors:
-      - name: PV Voltage
+      - name: Inverter PV Voltage
         unit_of_measurement: V
         device_class: current
         slave: 1
@@ -41,7 +41,7 @@ modbus:
         scale: 10
         precision: 1
 
-      - name: PV Power
+      - name: Inverter PV Power
         unit_of_measurement: W
         device_class: power
         slave: 1
@@ -52,7 +52,7 @@ modbus:
         scale: 10
         precision: 1
 
-      - name: Battery Amps
+      - name: Inverter Battery Amps
         unit_of_measurement: A
         device_class: battery
         slave: 1
@@ -63,7 +63,7 @@ modbus:
         scale: 10
         precision: 1
 
-      - name: Battery Voltage
+      - name: Inverter Battery Voltage
         unit_of_measurement: V
         device_class: current
         slave: 1
@@ -74,7 +74,7 @@ modbus:
         scale: 10
         precision: 1
 
-      - name: Battery SOC
+      - name: Inverter Battery SOC
         unit_of_measurement: %
         device_class: battery
         slave: 1
@@ -83,7 +83,7 @@ modbus:
         input_type: input
         data_type: int
 
-      - name: Mains Volt
+      - name: Inverter Mains Volt
         unit_of_measurement: V
         device_class: current
         slave: 1
@@ -94,7 +94,7 @@ modbus:
         scale: 10
         precision: 1
 
-      - name: Mains Freq
+      - name: Inverter Mains Freq
         unit_of_measurement: Hz
         device_class: frequency
         slave: 1
@@ -105,7 +105,7 @@ modbus:
         scale: 100
         precision: 2
 
-      - name: Output Volts
+      - name: Inverter Output Volts
         unit_of_measurement: V
         device_class: current
         slave: 1
@@ -116,7 +116,7 @@ modbus:
         scale: 10
         precision: 1
 
-      - name: Output Freq
+      - name: Inverter Output Freq
         unit_of_measurement: Hz
         device_class: frequency
         slave: 1
@@ -127,7 +127,7 @@ modbus:
         scale: 100
         precision: 2
 
-      - name: Inverter Temp
+      - name: Inverter Inverter Temp
         unit_of_measurement: °C
         device_class: temperature
         slave: 1
@@ -138,7 +138,7 @@ modbus:
         scale: 10
         precision: 1
 
-      - name: Load
+      - name: Inverter Load
         unit_of_measurement: %
         slave: 1
         scan_interval: 2
