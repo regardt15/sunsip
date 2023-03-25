@@ -34,6 +34,12 @@ modbus:
     stopbits: 1
 
     sensors:
+      - name: Inverter Status
+        slave: 1
+        scan_interval: 2
+        address: 0
+        input_type: input
+
       - name: Inverter PV1 Voltage
         unit_of_measurement: V
         device_class: current
@@ -51,18 +57,36 @@ modbus:
         address: 3
         input_type: input
         data_type: int32
-        count: 3
         scale: 0.1
 
       - name: Inverter Buck1 Current (Battery)
         unit_of_measurement: A
-        device_class: battery
         slave: 1
         scan_interval: 2
         address: 7
         input_type: input
         scale: 0.1
 
+      - name: Inverter Output Active Power
+        unit_of_measurement: W
+        device_class: power
+        slave: 1
+        scan_interval: 2
+        address: 9
+        input_type: input
+        data_type: int32
+        scale: 0.1
+
+      - name: Inverter AC Charge Watt
+        unit_of_measurement: W
+        device_class: power
+        slave: 1
+        scan_interval: 2
+        address: 13
+        input_type: input
+        data_type: int32
+        scale: 0.1
+        
       - name: Inverter Battery Voltage
         unit_of_measurement: V
         device_class: current
@@ -70,11 +94,10 @@ modbus:
         scan_interval: 2
         address: 17
         input_type: input
-        scale: 0.1
+        scale: 0.01
 
       - name: Inverter Battery SOC
         unit_of_measurement: "%"
-        device_class: battery
         slave: 1
         scan_interval: 2
         address: 18
@@ -96,7 +119,7 @@ modbus:
         scan_interval: 2
         address: 21
         input_type: input
-        scale: 0.10
+        scale: 0.01
 
       - name: Inverter AC Output Volt
         unit_of_measurement: V
@@ -116,7 +139,7 @@ modbus:
         input_type: input
         scale: 0.01
 
-      - name: Inverter Inverter Temp
+      - name: Inverter Temp
         unit_of_measurement: °C
         device_class: temperature
         slave: 1
@@ -133,4 +156,166 @@ modbus:
         input_type: input
         scale: 0.1
 
+      - name: Inverter Output Current
+        unit_of_measurement: A
+        slave: 1
+        scan_interval: 2
+        address: 34
+        input_type: input
+        scale: 0.1
 
+      - name: Inverter Current
+        unit_of_measurement: A
+        slave: 1
+        scan_interval: 2
+        address: 35
+        input_type: input
+        scale: 0.1
+
+      - name: Inverter AC Input Watt
+        unit_of_measurement: W
+        device_class: power
+        slave: 1
+        scan_interval: 2
+        address: 36
+        input_type: input
+        data_type: int32
+        scale: 0.1
+
+      - name: Inverter PV Energy Today
+        unit_of_measurement: kWh
+        slave: 1
+        scan_interval: 2
+        address: 49
+        input_type: input
+        scale: 0.1
+
+      - name: Inverter PV Energy Today
+        unit_of_measurement: kWh
+        slave: 1
+        scan_interval: 2
+        address: 48
+        input_type: input
+        data_type: int32
+        scale: 0.1
+
+      - name: Inverter AC Charge Energy Today
+        unit_of_measurement: kWh
+        slave: 1
+        scan_interval: 2
+        address: 56
+        input_type: input
+        data_type: int32
+        scale: 0.1
+
+      - name: Inverter Battery Discharge Energy Today
+        unit_of_measurement: kWh
+        slave: 1
+        scan_interval: 2
+        address: 60
+        input_type: input
+        data_type: int32
+        scale: 0.1
+
+      - name: Inverter AC Charge Battery Current
+        unit_of_measurement: A
+        slave: 1
+        scan_interval: 2
+        address: 68
+        input_type: input
+        scale: 0.1
+
+      - name: Inverter AC Discharge Watt
+        unit_of_measurement: W
+        device_class: power
+        slave: 1
+        scan_interval: 2
+        address: 69
+        input_type: input
+        data_type: int32
+        scale: 0.1
+
+      - name: Inverter Battery Discharge Watt
+        unit_of_measurement: W
+        device_class: power
+        slave: 1
+        scan_interval: 2
+        address: 73
+        input_type: input
+        data_type: int32
+        scale: 0.1
+        
+      - name: Inverter Battery Watt
+        unit_of_measurement: W
+        device_class: power
+        slave: 1
+        scan_interval: 2
+        address: 77
+        input_type: input
+        data_type: uint32
+        scale: 0.1
+
+
+      - name: Inverter AC Output Config 
+        unit_of_measurement: "[0: Batt First; 1: PV First; 2: UTI First]"
+        slave: 1
+        scan_interval: 2
+        address: 1
+        input_type: holding
+
+      - name: Inverter AC Charge Source
+        unit_of_measurement: "[0: PV First; 1: PV&UTI; 2: PV Only]"
+        slave: 1
+        scan_interval: 2
+        address: 2
+        input_type: holding
+        
+      - name: Inverter AC Charge Source
+        unit_of_measurement: "[0: PV First; 1: PV&UTI; 2: PV Only]"
+        slave: 1
+        scan_interval: 2
+        address: 2
+        input_type: holding
+        
+      - name: Inverter Overload Restart
+        unit_of_measurement: "[0: Yes; 1: No; 2: Switch to UTI]"
+        slave: 1
+        scan_interval: 2
+        address: 20
+        input_type: holding
+        
+      - name: Inverter Buzzer on/off Enable
+        unit_of_measurement: "[0: Disable; 1: Enable]"
+        slave: 1
+        scan_interval: 2
+        address: 22
+        input_type: holding
+
+      - name: Inverter Max Charge Current
+        unit_of_measurement: A
+        slave: 1
+        scan_interval: 2
+        address: 34
+        input_type: holding
+        
+      - name: Inverter Battery Type
+        unit_of_measurement: "[0: Lead Acid; 1: Lithium; 2: CustomLead_Acid]"
+        slave: 1
+        scan_interval: 2
+        address: 39
+        input_type: holding
+
+      - name: Inverter Time Hour
+        unit_of_measurement: h
+        slave: 1
+        scan_interval: 2
+        address: 48
+        input_type: holding
+        
+      - name: Inverter Time Minute
+        unit_of_measurement: m
+        slave: 1
+        scan_interval: 2
+        address: 49
+        input_type: holding
+        
