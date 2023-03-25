@@ -78,7 +78,13 @@
     file:
       path: /opt/home/hass/config/custom_components/growatt_local
       state: absent
-        
+
+  - name: Remove solax-modbus
+    become: true
+    file:
+      path: /opt/home/hass/config/custom_components/solax_modbus
+      state: absent
+
   - name: Create mosquitto directories
     become: true
     file:

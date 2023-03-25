@@ -2,6 +2,7 @@
 # Loads default set of integrations. Do not remove.
 default_config:
 
+  
 # Load frontend themes from the themes folder
 frontend:
   themes: !include_dir_merge_named themes
@@ -14,7 +15,10 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 
+
+
 # https://www.home-assistant.io/integrations/modbus
+# https://watts247.com/manuals/gw/GrowattModBusProtocol.pdf
 modbus:
   - name: "sacolar inverter"
     close_comm_on_error: true
@@ -30,38 +34,34 @@ modbus:
     stopbits: 1
 
     sensors:
-      - name: Inverter PV Voltage
+      - name: Inverter PV1 Voltage
         unit_of_measurement: V
         device_class: current
         slave: 1
         scan_interval: 2
         address: 1
         input_type: input
-        data_type: float
         scale: 10
-        precision: 1
 
-      - name: Inverter PV Power
+      - name: Inverter PV1 Charge Power
         unit_of_measurement: W
         device_class: power
         slave: 1
         scan_interval: 2
-        address: 4
+        address: 3
         input_type: input
-        data_type: float
+        data_type: int32
+        count: 3
         scale: 10
-        precision: 1
 
-      - name: Inverter Battery Amps
+      - name: Inverter Buck1 Current (Battery)
         unit_of_measurement: A
         device_class: battery
         slave: 1
         scan_interval: 2
         address: 7
         input_type: input
-        data_type: float
         scale: 10
-        precision: 1
 
       - name: Inverter Battery Voltage
         unit_of_measurement: V
@@ -70,51 +70,42 @@ modbus:
         scan_interval: 2
         address: 17
         input_type: input
-        data_type: float
         scale: 10
-        precision: 1
 
       - name: Inverter Battery SOC
-        unit_of_measurement: %
+        unit_of_measurement: "%"
         device_class: battery
         slave: 1
         scan_interval: 2
         address: 18
         input_type: input
-        data_type: int
 
-      - name: Inverter Mains Volt
+      - name: Inverter AC Input Volt
         unit_of_measurement: V
         device_class: current
         slave: 1
         scan_interval: 2
         address: 20
         input_type: input
-        data_type: float
         scale: 10
-        precision: 1
 
-      - name: Inverter Mains Freq
+      - name: Inverter AC Input Freq
         unit_of_measurement: Hz
         device_class: frequency
         slave: 1
         scan_interval: 2
         address: 21
         input_type: input
-        data_type: float
         scale: 100
-        precision: 2
 
-      - name: Inverter Output Volts
+      - name: Inverter AC Output Volt
         unit_of_measurement: V
         device_class: current
         slave: 1
         scan_interval: 2
         address: 22
         input_type: input
-        data_type: float
         scale: 10
-        precision: 1
 
       - name: Inverter Output Freq
         unit_of_measurement: Hz
@@ -123,9 +114,7 @@ modbus:
         scan_interval: 2
         address: 23
         input_type: input
-        data_type: float
         scale: 100
-        precision: 2
 
       - name: Inverter Inverter Temp
         unit_of_measurement: °C
@@ -134,18 +123,14 @@ modbus:
         scan_interval: 2
         address: 25
         input_type: input
-        data_type: float
         scale: 10
-        precision: 1
 
-      - name: Inverter Load
-        unit_of_measurement: %
+      - name: Inverter Load Percent
+        unit_of_measurement: "%"
         slave: 1
         scan_interval: 2
         address: 27
         input_type: input
-        data_type: float
         scale: 10
-        precision: 1
-        
-        
+
+
