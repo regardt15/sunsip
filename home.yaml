@@ -54,6 +54,12 @@
       path: /opt/home/hass/config
       state: directory
         
+  - name: Configure Homeassistant
+    become: true
+    copy:
+      src: ./hass/configuration.yaml
+      dest: /opt/home/hass/config/configuration.yaml
+
   - name: Fetch HACS install script
     become: true
     get_url:
@@ -93,20 +99,11 @@
       src: ./mosquitto/mosquitto.conf
       dest: /opt/home/mos/config/mosquitto.conf
 
-  - name: Create voltronic directory
+  - name: Remove voltronic defunct project
     become: true
     file:
-      path: /opt/home/voltronic/config
-      state: directory
-
-  - name: Configure voltronic
-    become: true
-    copy:
-      src: "./voltronic/{{ item }}"
-      dest: /opt/home/voltronic/config/
-    loop:
-      - inverter.conf
-      - mqtt.json
+      path: /opt/home/voltronic
+      state: absent
 
   - name: Install device script
     become: true

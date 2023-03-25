@@ -1,0 +1,151 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# https://www.home-assistant.io/integrations/modbus
+modbus:
+  - name: "sacolar inverter"
+    close_comm_on_error: true
+    delay: 5
+    timeout: 5
+
+    type: serial
+    baudrate: 9600
+    bytesize: 8
+    method: rtu
+    parity: E
+    port: /dev/ttyUSB-SERIAL
+    stopbits: 1
+
+    sensors:
+      - name: PV Voltage
+        unit_of_measurement: V
+        device_class: current
+        slave: 1
+        scan_interval: 2
+        address: 1
+        input_type: input
+        data_type: float
+        scale: 10
+        precision: 1
+
+      - name: PV Power
+        unit_of_measurement: W
+        device_class: power
+        slave: 1
+        scan_interval: 2
+        address: 4
+        input_type: input
+        data_type: float
+        scale: 10
+        precision: 1
+
+      - name: Battery Amps
+        unit_of_measurement: A
+        device_class: battery
+        slave: 1
+        scan_interval: 2
+        address: 7
+        input_type: input
+        data_type: float
+        scale: 10
+        precision: 1
+
+      - name: Battery Voltage
+        unit_of_measurement: V
+        device_class: current
+        slave: 1
+        scan_interval: 2
+        address: 17
+        input_type: input
+        data_type: float
+        scale: 10
+        precision: 1
+
+      - name: Battery SOC
+        unit_of_measurement: %
+        device_class: battery
+        slave: 1
+        scan_interval: 2
+        address: 18
+        input_type: input
+        data_type: int
+
+      - name: Mains Volt
+        unit_of_measurement: V
+        device_class: current
+        slave: 1
+        scan_interval: 2
+        address: 20
+        input_type: input
+        data_type: float
+        scale: 10
+        precision: 1
+
+      - name: Mains Freq
+        unit_of_measurement: Hz
+        device_class: frequency
+        slave: 1
+        scan_interval: 2
+        address: 21
+        input_type: input
+        data_type: float
+        scale: 100
+        precision: 2
+
+      - name: Output Volts
+        unit_of_measurement: V
+        device_class: current
+        slave: 1
+        scan_interval: 2
+        address: 22
+        input_type: input
+        data_type: float
+        scale: 10
+        precision: 1
+
+      - name: Output Freq
+        unit_of_measurement: Hz
+        device_class: frequency
+        slave: 1
+        scan_interval: 2
+        address: 23
+        input_type: input
+        data_type: float
+        scale: 100
+        precision: 2
+
+      - name: Inverter Temp
+        unit_of_measurement: °C
+        device_class: temperature
+        slave: 1
+        scan_interval: 2
+        address: 25
+        input_type: input
+        data_type: float
+        scale: 10
+        precision: 1
+
+      - name: Load
+        unit_of_measurement: %
+        slave: 1
+        scan_interval: 2
+        address: 27
+        input_type: input
+        data_type: float
+        scale: 10
+        precision: 1
+        
+        
