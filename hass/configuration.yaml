@@ -41,7 +41,7 @@ modbus:
         scan_interval: 2
         address: 1
         input_type: input
-        scale: 10
+        scale: 0.1
 
       - name: Inverter PV1 Charge Power
         unit_of_measurement: W
@@ -52,7 +52,7 @@ modbus:
         input_type: input
         data_type: int32
         count: 3
-        scale: 10
+        scale: 0.1
 
       - name: Inverter Buck1 Current (Battery)
         unit_of_measurement: A
@@ -61,7 +61,7 @@ modbus:
         scan_interval: 2
         address: 7
         input_type: input
-        scale: 10
+        scale: 0.1
 
       - name: Inverter Battery Voltage
         unit_of_measurement: V
@@ -70,7 +70,7 @@ modbus:
         scan_interval: 2
         address: 17
         input_type: input
-        scale: 10
+        scale: 0.1
 
       - name: Inverter Battery SOC
         unit_of_measurement: "%"
@@ -87,7 +87,7 @@ modbus:
         scan_interval: 2
         address: 20
         input_type: input
-        scale: 10
+        scale: 0.1
 
       - name: Inverter AC Input Freq
         unit_of_measurement: Hz
@@ -96,7 +96,7 @@ modbus:
         scan_interval: 2
         address: 21
         input_type: input
-        scale: 100
+        scale: 0.10
 
       - name: Inverter AC Output Volt
         unit_of_measurement: V
@@ -105,7 +105,7 @@ modbus:
         scan_interval: 2
         address: 22
         input_type: input
-        scale: 10
+        scale: 0.1
 
       - name: Inverter Output Freq
         unit_of_measurement: Hz
@@ -114,7 +114,7 @@ modbus:
         scan_interval: 2
         address: 23
         input_type: input
-        scale: 100
+        scale: 0.01
 
       - name: Inverter Inverter Temp
         unit_of_measurement: °C
@@ -123,7 +123,7 @@ modbus:
         scan_interval: 2
         address: 25
         input_type: input
-        scale: 10
+        scale: 0.1
 
       - name: Inverter Load Percent
         unit_of_measurement: "%"
@@ -131,6 +131,6 @@ modbus:
         scan_interval: 2
         address: 27
         input_type: input
-        scale: 10
+        scale: 0.1
 
 
