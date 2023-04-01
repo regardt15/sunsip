@@ -34,13 +34,13 @@ modbus:
     stopbits: 1
 
     sensors:
-      - name: Inverter Status
+      - name: 17 Inverter Status
         slave: 1
         scan_interval: 2
         address: 0
         input_type: input
 
-      - name: Inverter PV1 Voltage
+      - name: 16 PV1 Voltage
         unit_of_measurement: V
         device_class: current
         slave: 1
@@ -49,7 +49,7 @@ modbus:
         input_type: input
         scale: 0.1
 
-      - name: Inverter PV1 Charge Power
+      - name: 11 PV1 Power
         unit_of_measurement: W
         device_class: power
         slave: 1
@@ -59,7 +59,7 @@ modbus:
         data_type: int32
         scale: 0.1
 
-      - name: Inverter Buck1 Current (Battery)
+      - name: 13 Bat Charge Current
         unit_of_measurement: A
         slave: 1
         scan_interval: 2
@@ -67,17 +67,7 @@ modbus:
         input_type: input
         scale: 0.1
 
-      - name: Inverter Output Active Power
-        unit_of_measurement: W
-        device_class: power
-        slave: 1
-        scan_interval: 2
-        address: 9
-        input_type: input
-        data_type: int32
-        scale: 0.1
-
-      - name: Inverter AC Charge Watt
+      - name: 24 AC Charge Watt
         unit_of_measurement: W
         device_class: power
         slave: 1
@@ -87,7 +77,7 @@ modbus:
         data_type: int32
         scale: 0.1
         
-      - name: Inverter Battery Voltage
+      - name: 25 Battery Voltage
         unit_of_measurement: V
         device_class: current
         slave: 1
@@ -96,59 +86,14 @@ modbus:
         input_type: input
         scale: 0.01
 
-      - name: Inverter Battery SOC
+      - name: 14 Battery SOC
         unit_of_measurement: "%"
         slave: 1
         scan_interval: 2
         address: 18
         input_type: input
 
-      - name: Inverter AC Input Volt
-        unit_of_measurement: V
-        device_class: current
-        slave: 1
-        scan_interval: 2
-        address: 20
-        input_type: input
-        scale: 0.1
-
-      - name: Inverter AC Input Freq
-        unit_of_measurement: Hz
-        device_class: frequency
-        slave: 1
-        scan_interval: 2
-        address: 21
-        input_type: input
-        scale: 0.01
-
-      - name: Inverter AC Output Volt
-        unit_of_measurement: V
-        device_class: current
-        slave: 1
-        scan_interval: 2
-        address: 22
-        input_type: input
-        scale: 0.1
-
-      - name: Inverter Output Freq
-        unit_of_measurement: Hz
-        device_class: frequency
-        slave: 1
-        scan_interval: 2
-        address: 23
-        input_type: input
-        scale: 0.01
-
-      - name: Inverter Temp
-        unit_of_measurement: °C
-        device_class: temperature
-        slave: 1
-        scan_interval: 2
-        address: 25
-        input_type: input
-        scale: 0.1
-
-      - name: Inverter Load Percent
+      - name: 15 Load Percent
         unit_of_measurement: "%"
         slave: 1
         scan_interval: 2
@@ -156,7 +101,7 @@ modbus:
         input_type: input
         scale: 0.1
 
-      - name: Inverter Output Current
+      - name: 20 Inverter Output Current
         unit_of_measurement: A
         slave: 1
         scan_interval: 2
@@ -164,15 +109,7 @@ modbus:
         input_type: input
         scale: 0.1
 
-      - name: Inverter Current
-        unit_of_measurement: A
-        slave: 1
-        scan_interval: 2
-        address: 35
-        input_type: input
-        scale: 0.1
-
-      - name: Inverter AC Input Watt
+      - name: 10 AC Input Watt
         unit_of_measurement: W
         device_class: power
         slave: 1
@@ -182,7 +119,7 @@ modbus:
         data_type: int32
         scale: 0.1
 
-      - name: Inverter PV Energy Today
+      - name: 19 PV Energy Today
         unit_of_measurement: kWh
         slave: 1
         scan_interval: 2
@@ -190,16 +127,7 @@ modbus:
         input_type: input
         scale: 0.1
 
-      - name: Inverter PV Energy Today
-        unit_of_measurement: kWh
-        slave: 1
-        scan_interval: 2
-        address: 48
-        input_type: input
-        data_type: int32
-        scale: 0.1
-
-      - name: Inverter AC Charge Energy Today
+      - name: 22 AC Charge Energy Today
         unit_of_measurement: kWh
         slave: 1
         scan_interval: 2
@@ -208,7 +136,7 @@ modbus:
         data_type: int32
         scale: 0.1
 
-      - name: Inverter Battery Discharge Energy Today
+      - name: 23 Battery Discharge Energy Today
         unit_of_measurement: kWh
         slave: 1
         scan_interval: 2
@@ -225,94 +153,42 @@ modbus:
         input_type: input
         scale: 0.1
 
-      - name: Inverter AC Discharge Watt
-        unit_of_measurement: W
-        device_class: power
-        slave: 1
-        scan_interval: 2
-        address: 69
-        input_type: input
-        data_type: int32
-        scale: 0.1
-
-      - name: Inverter Battery Discharge Watt
-        unit_of_measurement: W
-        device_class: power
-        slave: 1
-        scan_interval: 2
-        address: 73
-        input_type: input
-        data_type: int32
-        scale: 0.1
-        
-      - name: Inverter Battery Watt
-        unit_of_measurement: W
-        device_class: power
-        slave: 1
-        scan_interval: 2
-        address: 77
-        input_type: input
-        data_type: uint32
-        scale: 0.1
-
-
-      - name: Inverter AC Output Config 
-        unit_of_measurement: "[0: Batt First; 1: PV First; 2: UTI First]"
+      - name: 30 AC Output Config 
+        unit_of_measurement: "[0: Batt First; 1: PV First; 2: UTI First; 3:PV&UTI First]"
         slave: 1
         scan_interval: 2
         address: 1
         input_type: holding
 
-      - name: Inverter AC Charge Source
+      - name: 31 AC Charge Source
         unit_of_measurement: "[0: PV First; 1: PV&UTI; 2: PV Only]"
         slave: 1
         scan_interval: 2
         address: 2
         input_type: holding
         
-      - name: Inverter AC Charge Source
-        unit_of_measurement: "[0: PV First; 1: PV&UTI; 2: PV Only]"
-        slave: 1
-        scan_interval: 2
-        address: 2
-        input_type: holding
-        
-      - name: Inverter Overload Restart
+      - name: 32 Overload Restart
         unit_of_measurement: "[0: Yes; 1: No; 2: Switch to UTI]"
         slave: 1
         scan_interval: 2
         address: 20
         input_type: holding
-        
-      - name: Inverter Buzzer on/off Enable
-        unit_of_measurement: "[0: Disable; 1: Enable]"
-        slave: 1
-        scan_interval: 2
-        address: 22
-        input_type: holding
 
-      - name: Inverter Max Charge Current
+      - name: 33 Max Charge Current
         unit_of_measurement: A
         slave: 1
         scan_interval: 2
         address: 34
         input_type: holding
-        
-      - name: Inverter Battery Type
-        unit_of_measurement: "[0: Lead Acid; 1: Lithium; 2: CustomLead_Acid]"
-        slave: 1
-        scan_interval: 2
-        address: 39
-        input_type: holding
 
-      - name: Inverter Time Hour
+      - name: 34 Inverter Time Hour
         unit_of_measurement: h
         slave: 1
         scan_interval: 2
         address: 48
         input_type: holding
         
-      - name: Inverter Time Minute
+      - name: 35 Inverter Time Minute
         unit_of_measurement: m
         slave: 1
         scan_interval: 2
