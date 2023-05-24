@@ -3,6 +3,21 @@
   hosts: homeassistant
 
   tasks:
+  - name: Add ngrok repository key
+    become: true
+    get_url:
+      url: https://ngrok-agent.s3.amazonaws.com/ngrok.asc
+      dest: /etc/apt/trusted.gpg.d/ngrok.asc
+      mode: '0644'
+      force: 'true'
+        
+  - name: Add ngrok repository
+    become: true
+    apt_repository:
+      repo: deb https://ngrok-agent.s3.amazonaws.com buster main
+      state: present
+      filename: google-chrome
+
   - name: Install basic stuff
     become: true
     apt:
@@ -12,6 +27,8 @@
         - gnupg2
         - ca-certificates
         - wget
+        - screen
+        - ngrok
       purge: true
       state: present
         
@@ -85,6 +102,12 @@
       path: /opt/home/hass/config/custom_components/solax_modbus
       state: absent
 
+  - name: Remove esphome directories
+    become: true
+    file:
+      path: /opt/home/esphome
+      state: absent
+        
   - name: Create mosquitto directories
     become: true
     file:
@@ -131,8 +154,10 @@
       src: ./docker-compose.yaml
       dest: /opt/home/docker-compose.yaml
 
-  - name: Start homeassistant and friends
-    become: true
-    command: /usr/bin/docker-compose -f /opt/home/docker-compose.yaml up --remove-orphans --force-recreate --detach 
-    args:
-      chdir: /opt/home
+#  - name: Start homeassistant and friends
+#    become: true
+#    command: /usr/bin/docker-compose -f /opt/home/docker-compose.yaml up --remove-orphans --force-recreate --detach 
+#    args:
+#      chdir: /opt/home
+
+

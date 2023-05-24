@@ -16,13 +16,20 @@ script: !include scripts.yaml
 scene: !include scenes.yaml
 
 
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 192.168.88.20
+    - 127.0.0.1
+    - ::1
+    - 172.18.0.1
 
 # https://www.home-assistant.io/integrations/modbus
 # https://watts247.com/manuals/gw/GrowattModBusProtocol.pdf
 modbus:
-  - name: "sacolar inverter"
+  - name: "sacolar_inverter"
     close_comm_on_error: true
-    delay: 5
+    delay: 10
     timeout: 5
 
     type: serial
@@ -30,168 +37,372 @@ modbus:
     bytesize: 8
     method: rtu
     parity: E
-    port: /dev/ttyUSB-SERIAL
+    port: /dev/ttyUSB0
     stopbits: 1
 
     sensors:
       - name: 17 Inverter Status
+        unique_id: inverter_1_status
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 0
         input_type: input
 
       - name: 16 PV1 Voltage
+        unique_id: inverter_1_pv1_voltage
         unit_of_measurement: V
-        device_class: current
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 1
         input_type: input
         scale: 0.1
 
       - name: 11 PV1 Power
+        unique_id: inverter_1_pv1_power
         unit_of_measurement: W
         device_class: power
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 3
         input_type: input
         data_type: int32
         scale: 0.1
 
       - name: 13 Bat Charge Current
+        unique_id: inverter_1_battery_charge_current
         unit_of_measurement: A
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 7
         input_type: input
         scale: 0.1
 
+      - name: 13 Output active power
+        unique_id: inverter_1_output_active_power
+        unit_of_measurement: W
+        slave: 1
+        scan_interval: 5
+        address: 9
+        input_type: input
+        data_type: int32
+        scale: 0.1
+
       - name: 24 AC Charge Watt
+        unique_id: inverter_1_ac_charge_watt
         unit_of_measurement: W
         device_class: power
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 13
         input_type: input
         data_type: int32
         scale: 0.1
         
       - name: 25 Battery Voltage
+        unique_id: inverter_1_battery_voltage
         unit_of_measurement: V
-        device_class: current
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 17
         input_type: input
         scale: 0.01
 
       - name: 14 Battery SOC
+        unique_id: inverter_1_battery_soc
         unit_of_measurement: "%"
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 18
         input_type: input
 
       - name: 15 Load Percent
+        unique_id: inverter_1_load_percent
         unit_of_measurement: "%"
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 27
         input_type: input
         scale: 0.1
 
       - name: 20 Inverter Output Current
+        unique_id: inverter_1_output_current
         unit_of_measurement: A
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 34
         input_type: input
         scale: 0.1
 
       - name: 10 AC Input Watt
+        unique_id: inverter_1_ac_input_watt
         unit_of_measurement: W
         device_class: power
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 36
         input_type: input
         data_type: int32
         scale: 0.1
 
+      - name: 10 Fault bit
+        unique_id: inverter_1_fault_bit
+        slave: 1
+        scan_interval: 10
+        address: 40
+        input_type: input
+
+      - name: 10 Warning bit L
+        unique_id: inverter_1_warning_bit_l
+        slave: 1
+        scan_interval: 10
+        address: 41
+        input_type: input
+
+      - name: 10 Warning bit H
+        unique_id: inverter_1_warning_bit_h
+        slave: 1
+        scan_interval: 10
+        address: 42
+        input_type: input
+
       - name: 19 PV Energy Today
+        unique_id: inverter_1_pv_energy_today
         unit_of_measurement: kWh
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 49
         input_type: input
         scale: 0.1
 
       - name: 22 AC Charge Energy Today
+        unique_id: inverter_1_ac_charge_energy_today
         unit_of_measurement: kWh
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 56
         input_type: input
         data_type: int32
+        device_class: energy
         scale: 0.1
 
       - name: 23 Battery Discharge Energy Today
+        unique_id: inverter_1_battery_discharge_energy_today
         unit_of_measurement: kWh
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 60
         input_type: input
         data_type: int32
         scale: 0.1
 
       - name: Inverter AC Charge Battery Current
+        unique_id: inverter_1_inverter_ac_charge_battery_current
         unit_of_measurement: A
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 68
         input_type: input
         scale: 0.1
 
       - name: 30 AC Output Config 
+        unique_id: inverter_1_ac_output_config
         unit_of_measurement: "[0: Batt First; 1: PV First; 2: UTI First; 3:PV&UTI First]"
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 1
         input_type: holding
 
       - name: 31 AC Charge Source
+        unique_id: inverter_1_ac_charge_source
         unit_of_measurement: "[0: PV First; 1: PV&UTI; 2: PV Only]"
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 2
         input_type: holding
         
       - name: 32 Overload Restart
+        unique_id: inverter_1_overload_restart
         unit_of_measurement: "[0: Yes; 1: No; 2: Switch to UTI]"
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 20
         input_type: holding
 
       - name: 33 Max Charge Current
+        unique_id: inverter_1_max_charge_current
         unit_of_measurement: A
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 34
         input_type: holding
 
       - name: 34 Inverter Time Hour
+        unique_id: inverter_1_time_hour
         unit_of_measurement: h
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 48
         input_type: holding
         
       - name: 35 Inverter Time Minute
+        unique_id: inverter_1_time_minute
         unit_of_measurement: m
         slave: 1
-        scan_interval: 2
+        scan_interval: 5
         address: 49
         input_type: holding
         
+
+
+template:
+  - sensor:
+      - name: "Time"
+        unique_id: inverter_time
+        state: >
+          {{ states('sensor.34_inverter_time_hour')|int(default=0) }}:{{ states('sensor.35_inverter_time_minute')|int(default=0) }}
+      - name: "Inverter state"
+        unique_id: inverter_status_mapped
+        state: >
+          {{ {0: 'Standby',
+              1: 'PV & Grid supporting loads',
+              2: 'Battery discharging',
+              3: 'Fault',
+              4: 'Flash',
+              5: 'PV charging',
+              6: 'Grid charging',
+              7: 'PV & Grid charging',
+              8: 'PV & Grid charging + grid bypass',
+              9: 'PV charging + grid bypass',
+              10: 'Grid charging + Grid Bypass',
+              11: 'Grid bypass',
+              12: 'PV charging + loads supporting',
+              13: 'Export to grid',
+              99: 'unavailable'
+             }[states('sensor.17_inverter_status')|int(default=99)] }}
+      - name: "AC output config"
+        unique_id: inverter_ac_output_config_mapped
+        state: >
+          {{ {0: 'Battery first',
+              1: 'PV first',
+              2: 'UTI first',
+              3: 'PV & UTI first',
+             99: 'unavailable'
+             }[states('sensor.30_ac_output_config')|int(default=99)] }}
+      - name: "AC charge source"
+        unique_id: inverter_ac_charge_source_mapped
+        state: >
+          {{ {0: 'PV first',
+              1: 'PV & UTI',
+              2: 'PV Only',
+             99: 'unavailable'
+             }[states('sensor.31_ac_charge_source')|int(default=99)] }}
+      - name: "Fault"
+        unique_id: inverter_fault_mapped
+        state: >
+          {{ {0: '-',
+              1: 'Fan Lock',
+              2: 'Over Temperature',
+              3: 'Bat Voltage High',
+              4: 'Battery low',
+              5: 'Output short',
+              6: 'Output voltage high',
+              7: 'Over Load',
+              8: 'Bus voltage high',
+              9: 'Bus start fail',
+              11: 'Main relay fail',
+              51: 'over current',
+              52: 'Bus voltage low',
+              53: 'inverter softstart fail',
+              56: 'IGBT Over Current ',
+              58: 'output voltage low',
+              60: 'negtive power',
+              61: 'PV voltage high',
+              62: 'SCI com error',
+              80: 'can fault',
+              81: 'host loss ',
+              99: 'unavailable'
+             }.get(states('sensor.10_fault_bit')|int(default=99), 'Unknown fault code {}'.format(states('sensor.10_fault_bit'))) }}
+      - name: "Warning L"
+        unique_id: inverter_warning_l_mapped
+        state: >
+          {{ {0: '-',
+              0x0001: 'Fan lock warning',
+              0x0002: 'Over charge',
+              0x0004: 'Battery voltage low',
+              0x0008: 'Over load',
+              0x0010: 'Op power derating',
+              0x0020: 'Solar stop due to bat low',
+              0x0040: 'Solar stop due to Pv high',
+              0x0080: 'solar stop due to over load',
+              0x0100: 'Grid different',
+              0x0200: 'Grid phase error',
+              0x0400: 'Op phase loss',
+              0x0800: 'Over temprature',
+              0x1000: 'Buck current over',
+              0x2000: 'Battery disconnected',
+              0x4000: 'BMS com error',
+              0x8000: 'Pv power insufficient',
+              0x9999: 'unavailable'
+             }.get(states('sensor.10_warning_bit_l')|int(default=0x9999), 'Unknown low warning code {}'.format(states('sensor.10_warning_bit_l'))) }}
+      - name: "Warning H"
+        unique_id: inverter_warning_h_mapped
+        state: >
+          {{ {0: '-',
+              0x0001: 'No bat parallel disable',
+              0x0002: 'Parallel version different',
+              0x0008: 'Capacity different',
+              0x0010: 'Host Loss',
+              0x0020: 'BmsCellOverVolt',
+              0x0040: 'BmsTotalOverVolt',
+              0x0080: 'BmsDischgOverCurr',
+              0x0100: 'BmsChgOverCurr',
+              0x0200: 'BmsOverTemp',
+              0x0400: 'Battery voltage consistent',
+              0x9999: 'unavailable'
+             }.get(states('sensor.10_warning_bit_h')|int(default=0x9999), 'Unknown high warning code {}'.format(states('sensor.10_warning_bit_h'))) }}
+
+input_datetime:
+  inverter_1_input_date_time:
+    name: Inverter 1 date and time
+    has_date: false
+    has_time: true
+               
+automation gettime:
+  trigger:
+  - platform: state
+    entity_id:
+      - sensor.34_inverter_time_hour
+      - sensor.35_inverter_time_minute
+  action:
+    service: input_datetime.set_datetime
+    entity_id: input_datetime.inverter_1_input_date_time
+    data:
+      time: "{{ states('sensor.34_inverter_time_hour')|int(default=0) }}:{{ states('sensor.35_inverter_time_minute')|int(default=0) }}:0"
+
+automation settime:
+  trigger:
+  - platform: state
+    entity_id:
+      - input_datetime.inverter_1_input_date_time
+    to:
+  action:
+    - if:
+        - "{{ not is_state('sensor.34_inverter_time_hour', state_attr('input_datetime.inverter_1_input_date_time','hour')) }}"
+      then:
+       - service: modbus.write_register
+         data_template:
+           hub: 'sacolar_inverter'
+           unit: '1'
+           address: '48'
+           value: "{{ state_attr('input_datetime.inverter_1_input_date_time','hour') }}"
+    - if:
+        - "{{ not is_state('sensor.35_inverter_time_minute', state_attr('input_datetime.inverter_1_input_date_time','minute')) }}"
+      then:
+       - service: modbus.write_register
+         data_template:
+           hub: 'sacolar_inverter'
+           unit: '1'
+           address: '49'
+           value: "{{ state_attr('input_datetime.inverter_1_input_date_time','minute') }}"
+
+

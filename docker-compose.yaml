@@ -8,6 +8,8 @@ services:
     volumes:
       - /opt/home/hass/config:/config
       - /etc/localtime:/etc/localtime:ro
+      - /var/run/dbus:/var/run/dbus
+      - /var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket
     ports:
       - "8123:8123"
 #    network_mode: host
@@ -25,33 +27,22 @@ services:
     ports:
       - "1883:1883"
 #      - "9001:9001"
-    
-#   voltronic-mqtt:
-#     container_name: voltronic-mqtt
-#     image: bushrangers/ha-voltronic-mqtt
-#     restart: unless-stopped
-# # Only supported from 3.9
-# #    profiles:
-# #      - dontstart
 
-#     device_cgroup_rules:
-#       - 'c 188:* rmw'  # For USB serial
+#  esphome:
+#    container_name: esphome
+##    build:
+##      context: .
+##      dockerfile: Dockerfile
+#    image: ghcr.io/esphome/esphome:stable
+#    volumes:
+#      - /opt/home/esphome/config:/config
+#      - /etc/localtime:/etc/localtime:ro
+#      - /var/run/dbus:/var/run/dbus
+#      - /var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket
+#
+#    restart: always
+#    ports:
+#      - "6052:6052"
 
-#     volumes:
-#         # - /run/udev:/run/udev:ro
-#         # - /dev:/dev:ro
-#         - /opt/home/voltronic/config:/etc/inverter/
 
-#     # devices:
-#     # #  - "/dev/mem:/dev/mem"
-
-#     # # USB Port Mapping
-#     #   - /dev/bus/usb:/dev/bus/usb:rwm
-#     #   - /dev/ttyUSB0:/dev/ttyUSB0:rwm
-#     #   - /dev/ttyUSB1:/dev/ttyUSB1:rwm
-
-#     # # Serial Port Mapping...
-#     #   - /dev/ttyS0:/dev/ttyS0
-#     #   - /dev/ttyS1:/dev/ttyS1
-#     #   - /dev/ttyS2:/dev/ttyS2
 
