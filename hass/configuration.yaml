@@ -1,4 +1,20 @@
 
+# TODO:
+# set times on startup or once a day
+# make reusable macros for dicts both ways
+# make binary sensors for important conditions:
+# - is eskom on?
+# - is there enough solar/battery to drive the geyser?
+# a select using the textual descriptions of options, mapped to the ints
+# - no textual state/config description sensors per inverter - only on the totals card
+# - but textual descriptions per inverter for faults and warnings
+# predefined cards with orders and partitions
+# make names consistent:
+#  power (watt)
+#  current (amp)
+#  potential/volt? (volt)
+# state chart?
+
 # Loads default set of integrations. Do not remove.
 default_config:
 
@@ -143,6 +159,16 @@ modbus:
         input_type: input
         data_type: int32
         scale: 0.1
+          
+      - name: Inverter 1 AC Input Volt
+        unique_id: inverter_1_ac_input_volt
+        unit_of_measurement: V
+        slave: 1
+        scan_interval: 5
+        address: 20
+        input_type: input
+        scale: 0.1
+          
       - name: Inverter 1 Fault bit
         unique_id: inverter_1_fault_bit
         slave: 1
@@ -250,6 +276,24 @@ modbus:
         scan_interval: 5
         address: 49
         input_type: holding
+          
+      - name: Inverter 1 Battery Low switch to UTI
+        unique_id: inverter_1_battery_low_switch_to_uti
+        unit_of_measurement: "%"
+        slave: 1
+        scan_interval: 5
+        address: 37
+        input_type: holding
+        scale: 0.1
+          
+      - name: Inverter 1 AC switch to battery
+        unique_id: inverter_1_ac_switch_to_battery
+        unit_of_measurement: "%"
+        slave: 1
+        scan_interval: 5
+        address: 95
+        input_type: holding
+        scale: 0.1
 
           
   - name: "inverter2"
@@ -369,6 +413,15 @@ modbus:
         data_type: int32
         scale: 0.1
           
+      - name: Inverter 2 AC Input Volt
+        unique_id: inverter_2_ac_input_volt
+        unit_of_measurement: V
+        slave: 1
+        scan_interval: 5
+        address: 20
+        input_type: input
+        scale: 0.1
+          
       - name: Inverter 2 Fault bit
         unique_id: inverter_2_fault_bit
         slave: 1
@@ -477,7 +530,224 @@ modbus:
         address: 49
         input_type: holding
 
+      - name: Inverter 2 Battery Low switch to UTI
+        unique_id: inverter_2_battery_low_switch_to_uti
+        unit_of_measurement: "%"
+        slave: 1
+        scan_interval: 5
+        address: 37
+        input_type: holding
+        scale: 0.1
+          
+      - name: Inverter 2 AC switch to battery
+        unique_id: inverter_2_ac_switch_to_battery
+        unit_of_measurement: "%"
+        slave: 1
+        scan_interval: 5
+        address: 95
+        input_type: holding
+        scale: 0.1
 
+
+switch:
+  - platform: template
+    switches:
+      inverter_output_to_uti:
+        friendly_name: 'Inverter output utility first (Uti)'
+        value_template: "{{ is_state('sensor.inverter_1_ac_output_config', '2') }}"
+        turn_on:
+          service: modbus.write_register 
+          data_template:
+            hub: 'inverter1'
+            unit: '1'
+            address: '1'
+            value: '2'
+        turn_off:
+          service: modbus.write_register 
+          data_template:
+            hub: 'inverter1'
+            unit: '1'
+            address: '1'
+            value: '0'
+      inverter_output_to_sbu:
+        friendly_name: 'Inverter output battery first (SbU)'
+        value_template: "{{ is_state('sensor.inverter_1_ac_output_config', '0') }}"
+        turn_on:
+          service: modbus.write_register 
+          data_template:
+            hub: 'inverter1'
+            unit: '1'
+            address: '1'
+            value: '0'
+        turn_off:
+          service: modbus.write_register 
+          data_template:
+            hub: 'inverter1'
+            unit: '1'
+            address: '1'
+            value: '2'
+      inverter_output_to_sol:
+        friendly_name: 'Inverter output solar first (SOL)'
+        value_template: "{{ is_state('sensor.inverter_1_ac_output_config', '1') }}"
+        turn_on:
+          service: modbus.write_register 
+          data_template:
+            hub: 'inverter1'
+            unit: '1'
+            address: '1'
+            value: '1'
+        turn_off:
+          service: modbus.write_register 
+          data_template:
+            hub: 'inverter1'
+            unit: '1'
+            address: '1'
+            value: '0'
+      inverter_output_to_sub:
+        friendly_name: 'Inverter output PV&Uti first (SUB)'
+        value_template: "{{ is_state('sensor.inverter_1_ac_output_config', '3') }}"
+        turn_on:
+          service: modbus.write_register 
+          data_template:
+            hub: 'inverter1'
+            unit: '1'
+            address: '1'
+            value: '3'
+        turn_off:
+          service: modbus.write_register 
+          data_template:
+            hub: 'inverter1'
+            unit: '1'
+            address: '1'
+            value: '0'
+      inverter_charge_source_to_cso:
+        friendly_name: 'Inverter charge from solar first (CSO)'
+        value_template: "{{ is_state('sensor.inverter_1_ac_charge_source', '0') }}"
+        turn_on:
+          service: modbus.write_register 
+          data_template:
+            hub: 'inverter1'
+            unit: '1'
+            address: '2'
+            value: '0'
+        turn_off:
+          service: modbus.write_register 
+          data_template:
+            hub: 'inverter1'
+            unit: '1'
+            address: '2'
+            value: '2'
+      inverter_charge_source_to_snu:
+        friendly_name: 'Inverter charge from solar and Uti (SNU)'
+        value_template: "{{ is_state('sensor.inverter_1_ac_charge_source', '1') }}"
+        turn_on:
+          service: modbus.write_register 
+          data_template:
+            hub: 'inverter1'
+            unit: '1'
+            address: '2'
+            value: '1'
+        turn_off:
+          service: modbus.write_register 
+          data_template:
+            hub: 'inverter1'
+            unit: '1'
+            address: '2'
+            value: '2'
+      inverter_charge_source_to_oso:
+        friendly_name: 'Inverter charge from only solar (OSO)'
+        value_template: "{{ is_state('sensor.inverter_1_ac_charge_source', '2') }}"
+        turn_on:
+          service: modbus.write_register 
+          data_template:
+            hub: 'inverter1'
+            unit: '1'
+            address: '2'
+            value: '2'
+        turn_off:
+          service: modbus.write_register 
+          data_template:
+            hub: 'inverter1'
+            unit: '1'
+            address: '2'
+            value: '0'
+      inverter_topup:
+        friendly_name: 'Inverter topup from Uti'
+
+        turn_on:
+          - service: modbus.write_register 
+            data_template:
+              hub: 'inverter1'
+              unit: '1'
+              address: '95'
+              value: '{{ 95*10 }}'
+          - service: modbus.write_register 
+            data_template:
+              hub: 'inverter1'
+              unit: '1'
+              address: '37'
+              value: "{{ states('sensor.inverter_1_battery_soc')|float(default=0.0)*10|int(default=0) }}"
+          - delay:
+              seconds: 5
+          - service: switch.turn_on
+            target:
+              entity_id: switch.inverter_charge_source_to_snu
+        turn_off:
+          - service: switch.turn_on
+            target:
+              entity_id: switch.inverter_charge_source_to_oso
+          - delay:
+              seconds: 5
+          - service: modbus.write_register 
+            data_template:
+              hub: 'inverter1'
+              unit: '1'
+              address: '37'
+              value: '{{ 45*10 }}'
+          - service: modbus.write_register 
+            data_template:
+              hub: 'inverter1'
+              unit: '1'
+              address: '95'
+              value: '{{ 47*10 }}'
+
+      inverter_topup_test:
+        friendly_name: 'Inverter test'
+
+        turn_on:
+          - service: modbus.write_register 
+            data_template:
+              hub: 'inverter1'
+              unit: '1'
+              address: '95'
+              value: '{{ 95*10 }}'
+          - service: modbus.write_register 
+            data_template:
+              hub: 'inverter1'
+              unit: '1'
+              address: '37'
+              value: "{{ states('sensor.inverter_1_battery_soc')|float(default=0.0)*10|int(default=0) }}"
+        turn_off:
+          - service: modbus.write_register 
+            data_template:
+              hub: 'inverter1'
+              unit: '1'
+              address: '37'
+              value: '{{ 45*10 }}'
+          - service: modbus.write_register 
+            data_template:
+              hub: 'inverter1'
+              unit: '1'
+              address: '95'
+              value: '{{ 47*10 }}'
+      inverter_eskom_auto_switching:
+        friendly_name: 'Inverter eskom auto switching'
+        turn_on:
+          delay: 0
+        turn_off:
+          delay: 0
+
+      
 template:
   - sensor:
       - name: "Inverter 1 status description"
@@ -666,7 +936,10 @@ template:
           {% endif %}
           
         
-
+      - name: "Inverter status description"
+        unique_id: inverter_status_description
+        state: >
+          {{ states('sensor.inverter_1_status_description') }}
       - name: "AC output config"
         unique_id: inverter_ac_output_config_description
         state: >
@@ -689,6 +962,11 @@ template:
         unit_of_measurement: W
         state: >
             {{ states('sensor.inverter_1_pv1_power')|float(default=0.0) + states('sensor.inverter_2_pv1_power')|float(default=0.0) }}
+      - name: "Inverter PV power percentage"
+        unique_id: inverter_pv_power_percentage
+        unit_of_measurement: "%"
+        state: >
+            {{ '%.2f'|format(states('sensor.inverter_total_pv_power')|float(default=0.0) / (10*550*0.67)*100) }}
       - name: "Inverter total PV Voltage"
         unique_id: inverter_total_pv_voltage
         unit_of_measurement: V
@@ -719,6 +997,11 @@ template:
         unit_of_measurement: W
         state: >
             {{ states('sensor.inverter_1_ac_input_watt')|float(default=0.0) + states('sensor.inverter_2_ac_input_watt')|float(default=0.0) }}
+      - name: "Inverter AC Input Voltage"
+        unique_id: inverter_ac_input_volt
+        unit_of_measurement: V
+        state: >
+            {{ (states('sensor.inverter_1_ac_input_volt')|float(default=0.0) + states('sensor.inverter_2_ac_input_volt')|float(default=0.0))/2.0 }}
       - name: "Inverter total PV Energy Today"
         unique_id: inverter_total_pv_energy_today
         unit_of_measurement: kWh
@@ -736,51 +1019,201 @@ template:
             {{ states('sensor.inverter_1_battery_discharge_energy_today')|float(default=0.0) + states('sensor.inverter_2_battery_discharge_energy_today')|float(default=0.0) }}
 
 
+sensor:
+  - platform: derivative
+    name: "Inverter rate of change in Battery SOC"
+    source: sensor.inverter_total_battery_soc
+    time_window: "00:05:00"
+
+input_number:
+  inverter_1_input_battery_low_switch_to_uti:
+    name: Set inverter 1 battery low switch to uti
+    min: 30
+    max: 95
+    mode: box
+    unit_of_measurement: "%"
+  inverter_1_input_ac_switch_to_battery:
+    name: Set inverter 1 ac switch to battery
+    min: 30
+    max: 95
+    mode: box
+    unit_of_measurement: "%"
 
 
-
-input_datetime:
-  inverter_1_input_date_time:
-    name: Inverter 1 date and time
-    has_date: false
-    has_time: true
-               
-automation gettime:
+automation set_ac_switch_to_battery:
+  alias: Set AC switch to battery
   trigger:
   - platform: state
     entity_id:
-      - sensor.inverter_1_time_hour
-      - sensor.inverter_1_time_minute
-  action:
-    service: input_datetime.set_datetime
-    entity_id: input_datetime.inverter_1_input_date_time
-    data:
-      time: "{{ states('sensor.inverter_1_time_hour')|int(default=0) }}:{{ states('sensor.inverter_1_time_minute')|int(default=0) }}:0"
-
-automation settime:
-  trigger:
-  - platform: state
-    entity_id:
-      - input_datetime.inverter_1_input_date_time
+      - input_number.inverter_1_input_ac_switch_to_battery
     to:
   action:
     - if:
-        - "{{ not is_state('sensor.inverter_1_time_hour', state_attr('input_datetime.inverter_1_input_date_time','hour')) }}"
+        - "{{ not is_state('sensor.inverter_1_ac_switch_to_battery', states('input_number.inverter_1_input_ac_switch_to_battery')) }}"
       then:
        - service: modbus.write_register
          data_template:
            hub: 'inverter1'
-           unit: '0'
-           address: '48'
-           value: "{{ state_attr('input_datetime.inverter_1_input_date_time','hour') }}"
+           unit: '1'
+           address: '95'
+           value: "{{ states('input_number.inverter_1_input_ac_switch_to_battery')|float(default=0.0)*10 }}"
+
+automation set_battery_low_switch_to_uti:
+  alias: Set battery low switch to uti
+  trigger:
+  - platform: state
+    entity_id:
+      - input_number.inverter_1_input_battery_low_switch_to_uti
+    to:
+  action:
     - if:
-        - "{{ not is_state('sensor.inverter_1_time_minute', state_attr('input_datetime.inverter_1_input_date_time','minute')) }}"
+        - "{{ not is_state('sensor.inverter_1_ac_switch_to_battery', states('input_number.inverter_1_input_ac_switch_to_battery')) }}"
       then:
        - service: modbus.write_register
          data_template:
            hub: 'inverter1'
-           unit: '0'
-           address: '49'
-           value: "{{ state_attr('input_datetime.inverter_1_input_date_time','minute') }}"
+           unit: '1'
+           address: '37'
+           value: "{{ states('input_number.inverter_1_input_battery_low_switch_to_uti')|float(default=0.0)*10 }}"
+
+             
+input_select:
+  inverter_1_input_charge_source:
+    name: Set inverter 1 charge source
+    options:
+      - 0
+      - 1
+      - 2
+#    initial: states('sensor.inverter_1_ac_charge_source')|int(default=0)
+
+  inverter_1_input_ac_output_config:
+    name: Set inverter 1 output config
+    options:
+      - 0
+      - 1
+      - 2
+      - 3 
+
+automation set_charge_source:
+  alias: Set charge source
+  trigger:
+  - platform: state
+    entity_id:
+      - input_select.inverter_1_input_charge_source
+    to:
+  action:
+    - if:
+        - "{{ not is_state('inverter_1_ac_charge_source', states('input_select.inverter_1_input_charge_source')) }}"
+      then:
+       - service: modbus.write_register
+         data_template:
+           hub: 'inverter1'
+           unit: '1'
+           address: '2'
+           value: "{{ states('input_select.inverter_1_input_charge_source') }}"
 
 
+
+automation set_output_config:
+  alias: Set output config
+  trigger:
+  - platform: state
+    entity_id:
+      - input_select.inverter_1_input_ac_output_config
+    to:
+  action:
+    - service: modbus.write_register
+      data_template:
+        hub: 'inverter1'
+        unit: '1'
+        address: '1'
+        value: "{{ states('input_select.inverter_1_input_ac_output_config') }}"
+    - if:
+        - "{{ not is_state('inverter_1_ac_output_config', states('input_select.inverter_1_input_ac_output_config')) }}"
+      then:
+       - service: modbus.write_register
+         data_template:
+           hub: 'inverter1'
+           unit: '1'
+           address: '1'
+           value: "{{ states('input_select.inverter_1_input_ac_output_config') }}"
+
+             
+automation set_inverter_time:
+  alias: Set inverter time
+  trigger:
+  - platform: time_pattern
+    hours: 0
+  action:
+  - service: modbus.write_register
+    data_template:
+      hub: 'inverter1'
+      unit: '0'
+      address: '45'
+      value: "{{ now().year-2000 }}"
+  - service: modbus.write_register
+    data_template:
+      hub: 'inverter1'
+      unit: '0'
+      address: '46'
+      value: "{{ now().month }}"
+  - service: modbus.write_register
+    data_template:
+      hub: 'inverter1'
+      unit: '0'
+      address: '47'
+      value: "{{ now().day }}"
+  - service: modbus.write_register
+    data_template:
+      hub: 'inverter1'
+      unit: '0'
+      address: '48'
+      value: "{{ now().hour }}"
+  - service: modbus.write_register
+    data_template:
+      hub: 'inverter1'
+      unit: '0'
+      address: '49'
+      value: "{{ now().minute }}"
+  - service: modbus.write_register
+    data_template:
+      hub: 'inverter2'
+      unit: '0'
+      address: '45'
+      value: "{{ now().year-2000 }}"
+  - service: modbus.write_register
+    data_template:
+      hub: 'inverter2'
+      unit: '0'
+      address: '46'
+      value: "{{ now().month }}"
+  - service: modbus.write_register
+    data_template:
+      hub: 'inverter2'
+      unit: '0'
+      address: '47'
+      value: "{{ now().day }}"
+  - service: modbus.write_register
+    data_template:
+      hub: 'inverter2'
+      unit: '0'
+      address: '48'
+      value: "{{ now().hour }}"
+  - service: modbus.write_register
+    data_template:
+      hub: 'inverter2'
+      unit: '0'
+      address: '49'
+      value: "{{ now().minute }}"
+
+
+    
+             
+
+
+recorder:
+  purge_keep_days: 730
+  exclude:
+    entities:
+      - sensor.inverter_2_time
+      - sensor.inverter_1_time
