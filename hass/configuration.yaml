@@ -673,7 +673,6 @@ switch:
             value: '0'
       inverter_topup:
         friendly_name: 'Inverter topup from Uti'
-
         turn_on:
           - service: modbus.write_register 
             data_template:
@@ -687,8 +686,8 @@ switch:
               unit: '1'
               address: '37'
               value: "{{ states('sensor.inverter_1_battery_soc')|float(default=0.0)*10|int(default=0) }}"
-          - delay:
-              seconds: 5
+#          - delay:
+#              seconds: 5
           - service: switch.turn_on
             target:
               entity_id: switch.inverter_charge_source_to_snu
@@ -696,8 +695,8 @@ switch:
           - service: switch.turn_on
             target:
               entity_id: switch.inverter_charge_source_to_oso
-          - delay:
-              seconds: 5
+#          - delay:
+#              seconds: 5
           - service: modbus.write_register 
             data_template:
               hub: 'inverter1'
@@ -1039,6 +1038,10 @@ input_number:
     mode: box
     unit_of_measurement: "%"
 
+input_boolean:
+  cottage_geyser_forced_to_solar:
+    name: Geyser forced to use solar only
+    initial: false
 
 automation set_ac_switch_to_battery:
   alias: Set AC switch to battery

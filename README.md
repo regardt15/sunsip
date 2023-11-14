@@ -43,3 +43,9 @@
 - Investigate file ownerships and owner of running processes.
 - Investigate security considerations.
 - Rotating logfiles (including /var/log/docker_tty.log).
+
+- Add ngrok as service with config in /home/iwan/.ngrok2/ngrok.yml
+  sudo ngrok service install --config=/home/iwan/.ngrok2/ngrok.yml
+  sudo ngrok service start
+  journalctl -f $(which ngrok)
+  
